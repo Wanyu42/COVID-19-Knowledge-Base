@@ -1,6 +1,6 @@
 import pandas as pd
 from py2neo import Graph, Node, Relationship, NodeMatcher
-
+from tqdm import tqdm
 
 #gene_file = '../../data_uiuc/genes.csv'
 #disease_file = '../../data_uiuc/diseases.csv'
@@ -27,7 +27,7 @@ def create_disease_node(disease):
     :param disease: pandas file
     :return: void
     """
-    for i in range(len(disease)):
+    for i in tqdm(range(len(disease))):
         node_info = disease.loc[i]
         node = Node('Disease', DiseaseID = node_info[1], DiseaseName = node_info[0])
         graph.create(node)
@@ -41,7 +41,7 @@ def create_chemical_node(chemical):
     :param chemical: chemical, pandas DataFrame
     :return: void
     '''
-    for i in range(len(chemical)):
+    for i in tqdm(range(len(chemical))):
         node_info = chemical.loc[i]
         node = Node('Chemical', ChemicalID = node_info['ChemicalID'], \
                     ChemicalName = node_info['ChemicalName'])
@@ -58,7 +58,7 @@ def create_diseaseParent_relation(disease):
 
     nodematcher = NodeMatcher(graph)
     ParentDisease = Relationship.type('ParentDisease')
-    for i in range(len(disease)):
+    for i in tqdm(range(len(disease))):
         node_info = disease.loc[i]
 
         # The node does not have parent
@@ -87,7 +87,7 @@ def create_chemicalParent_relation(chemical):
     '''
     nodematcher = NodeMatcher(graph)
     ParentChemical = Relationship.type('ParentChemical')
-    for i in range(len(chemical)):
+    for i in tqdm(range(len(chemical))):
         node_info = chemical.loc[i]
 
         # The node does not have parent
@@ -109,7 +109,7 @@ def create_chemicalParent_relation(chemical):
 def create_ChemicalDisease_relation(chemical_disease):
     nodematcher = NodeMatcher(graph)
     ChemicalDisease = Relationship.type('ChemicalDisease')
-    for i in range(len(chemical_disease)):
+    for i in tqdm(range(len(chemical_disease))):
         rel_info = chemical_disease.loc[i]
 
         # if there is no pmids, i.e., there is no paper describing the relations, then drop
@@ -140,13 +140,18 @@ if __name__=='__main__':
     # Following code is preserved
     '''
     graph.run("CREATE CONSTRAINT uniqueDisease ON (n:Disease) ASSERT n.DiseaseID IS UNIQUE")
+    print('Build Disease Node')
     create_disease_node(disease)
+    print('Build DiseaseParent Relation')
     create_diseaseParent_relation(disease)
     
     graph.run("CREATE CONSTRAINT uniqueChemical ON (n:Chemical) ASSERT n.ChemicalID IS UNIQUE")
+    print('Build Chemical Node')
     create_chemical_node(chemical)
+    print('Build ChemicalParent Relation')
     create_chemicalParent_relation(chemical)
     
+    print('Build ChemicalDisease Relation')
     create_ChemicalDisease_relation(chemical_disease)
     '''
 
