@@ -14,5 +14,7 @@ neo4j community edition 4.x
 py2neo 2021
 requests
 BeautifulSoup4
+concurrent
 
 To open the database, from the backend you need to input "neo4j console"
+
