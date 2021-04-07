@@ -6,7 +6,6 @@ from GraphQueryClass import GraphQuery
 
 app = Flask(__name__)
 myQuery = GraphQuery()
-Dict = {'a': 1, 'b': 2, 'c': 3 , 'd': 4}
 
 '''
 @app.route('/')
@@ -17,15 +16,20 @@ def hello():
 
 @app.route('/', methods=['POST','GET'])
 def init():
-    chemical_name=None
+    chemical_name = None
+    paperlist = None
     if request.method == 'POST':
         chemical = request.form['chemical']
         query_result = myQuery.findChemicalbyID(chemical)
         if query_result == None:
             chemical_name ='Chemical Not Found!'
+            paperlist = ['Paper Not Found!']
         else:
             chemical_name = query_result['ChemicalName']
-    return render_template('init.html', chemical_name=chemical_name)
+            paper_of_chemical = myQuery.findPaperGivenChemical(query_result)
+            column = list(zip(*paper_of_chemical))
+            paperlist = sum(column[1],[])
+    return render_template('init.html', chemical_name=chemical_name, paperlist = paperlist)
 
 
 if __name__ == '__main__':
