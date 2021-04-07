@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -114,6 +114,13 @@
                                 <tr>
                                     <td class="align-middle"> {{ chemical_name }} </td>
                                 </tr>
+                            {% endif %}
+                            {% if paperlist %}
+                                {% for paper in paperlist %}
+                                    <tr>
+                                        <td> {{ paper }} </td>
+                                    </tr>
+                                {% endfor %}
                             {% endif %}
                         </tbody>
                     </table>
