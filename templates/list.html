@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <title>Search Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+            background: #f8f8f8
+        }
+
+        .avatar--md .avatar__content img {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+    <style>
+        <!--
+        .select {
+            background: transparent;
+            border-radius: 0;
+            border: 0;
+            height: 100%;
+            color: #808080;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 5px 15px;
+        }
+        -->
+    </style>
+</head>
+<body>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="mb-4">
+                <div class="input-select">
+                    <select data-trigger="" name="choices-single-defaul" class="select">
+                        <option placeholder="">Not Specific</option>
+                        <option>Chemicals</option>
+                        <option>Genes</option>
+                        <option>Diseases</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <form method="post" action="{{url_for('init')}}">
+                        <input placeholder="Search for..." type="text" class="form-control" name="chemical" id="chemical">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary" id="searchButton"><i class="fa fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="small mb-3">Subjects</div>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a href="#" class="d-flex nav-link" id="linkS1">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s1">12</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s2">4</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s3">9</span></a></li>
+                </ul>
+            </div>
+
+            <div class="mb-4">
+                <div class="small mb-3">Authors</div>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">12</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a2">4</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a3">9</span></a></li>
+                </ul>
+            </div>
+
+            <div class="mb-4">
+                <div class="small mb-3">Publication Dates</div>
+                <ul class="nav flex-column nav-pills">
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p1">12</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p2">4</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p3">9</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+            <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
+                <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="active breadcrumb-item" aria-current="page">Papers</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="mb-3 Card_custom-card--border_5wJKy card">
+                <div class="table-responsive-xl">
+                    <table class="mb-0 table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="align-middle bt-0">Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    <div><a href="/apps/tasks/list">Ergonomic real-time adapter</a></div><span>Last Edited by: Savanah Durgan <br>Sunday, 12 June, 2018</span>
+                                </td>
+                            </tr>
+                            {% if chemical_name %}
+                                <tr>
+                                    <td class="align-middle"> {{ chemical_name }} </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-center pb-0 card-footer">
+                    <nav class="" aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a href="#" class="page-link" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-fw fa-angle-left"></i></span><span class="sr-only">Previous</span></a></li>
+                            <li class="page-item"><a href="#" class="page-link" id="page1">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link" id="page2">2</a></li>
+                            <li class="page-item"><a href="#" class="page-link" id="page3">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link" aria-label="Next"><span aria-hidden="true"><i class="fa fa-fw fa-angle-right"></i></span><span class="sr-only">Next</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="mb-4">
+                <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
+                    <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="active breadcrumb-item" aria-current="page">Suggested Search</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="avatar-image avatar-image--loaded">
+                    <div class="avatar avatar--md avatar-image__image">
+                        <div class="avatar__content"><center><img src="https://miro.medium.com/max/875/1*Lx6iWlcFiCHVe1r4zAeijQ.png"></center></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="list.js" type="text/javascript"></script>
+
+</body>
+</html>
