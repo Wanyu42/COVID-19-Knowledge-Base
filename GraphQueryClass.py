@@ -1,5 +1,6 @@
 from py2neo import Graph
 from py2neo.matching import *
+from pandas.core.common import flatten
 
 
 class GraphQuery:
@@ -70,7 +71,7 @@ class GraphQuery:
         child_list = [rel.start_node for rel in rel_list]
         return child_list
 
-    def findPaperGivenChemical(self, ChemicalNode):
+    def findPaperGivenChemical(self, ChemicalNode, return_node=False):
         '''
         Retrieve the list of papers containing the chemical node
         :param ChemicalNode: Node type
@@ -78,10 +79,14 @@ class GraphQuery:
                 (Disease Node), the second column be string 'pmids'
         '''
         rel_list = self.relmatcher.match([ChemicalNode, None], r_type='ChemicalDisease')
-        paper_list = [ [rel.end_node, rel.get('pmids')] for rel in rel_list]
+        if return_node==True:
+            paper_list = [ [rel.end_node, rel.get('pmids')] for rel in rel_list]
+        else:
+            paper_list = [rel.get('pmids') for rel in rel_list]
+            paper_list = list(set(flatten(paper_list)))
         return paper_list
 
-    def findPaperGivenDisease(self, DiseaseNode):
+    def findPaperGivenDisease(self, DiseaseNode, return_node=False):
         '''
         Retrieve the list of papers containing the desease node
         :param DiseaseNode: Node type
@@ -89,7 +94,11 @@ class GraphQuery:
                 has effect on the disease, and the second column being the paper with 'pmids'
         '''
         rel_list = self.relmatcher.match([None, DiseaseNode], r_type='ChemicalDisease')
-        paper_list = [ [rel.start_node, rel.get('pmids')] for rel in rel_list]
+        if return_node==True:
+            paper_list = [ [rel.start_node, rel.get('pmids')] for rel in rel_list]
+        else:
+            paper_list = [rel.get('pmids') for rel in rel_list]
+            paper_list = list(set(flatten(paper_list)))
         return paper_list
 
     def findPaperGivenPair(self, ChemicalNode, DiseaseNode):
@@ -101,16 +110,22 @@ class GraphQuery:
         '''
         rel_list = self.relmatcher.match([ChemicalNode, DiseaseNode], r_type='ChemicalDisease')
         paper_list = [rel.get('pmids') for rel in rel_list]
+        paper_list = list(set(flatten(paper_list)))
         return paper_list
 
     def findDiseaseContainName(self, DiseaseName):
         """
         find the disease Node containing the name string
         :param DiseaseName: string type
-        :return: list of Node type
+        :return: a dictionary {key:DiseaseID, value:DiseaseName}
         """
-        return self.nodematcher.match('Disease', DiseaseName=CONTAINS(DiseaseName)).\
+        node_list = self.nodematcher.match('Disease', DiseaseName=CONTAINS(DiseaseName)).\
             limit(self.size_lim)
+        node_dict = {}
+        for node in node_list:
+            node_dict[node.get('DiseaseID')] = node.get('DiseaseName')
+        return node_dict
+
 
     def findChemicalContainName(self, ChemicalName):
         """
@@ -118,8 +133,12 @@ class GraphQuery:
         :param ChemicalName: string type
         :return: list of Node type
         """
-        return self.nodematcher.match('Chemical', ChemicalName=CONTAINS(ChemicalName)).\
+        node_list = self.nodematcher.match('Chemical', ChemicalName=CONTAINS(ChemicalName)).\
             limit(self.size_lim)
+        node_dict = {}
+        for node in node_list:
+            node_dict[node.get('ChemicalID')] = node.get('ChemicalName')
+        return node_dict
 
     def findDiseaseGivenChemical(self, ChemicalNode):
         """
@@ -168,8 +187,8 @@ class GraphQuery:
 if __name__ == "__main__":
     print("Hello GraphQuery")
 
-
     myQuery = GraphQuery()
+
     '''
     # test cases
 
@@ -192,18 +211,18 @@ if __name__ == "__main__":
     paper_of_chemical = myQuery.findPaperGivenChemical(test_chemical)
     #print(paper_of_chemical[:][1])
     # Retrieve the whole papers
-    column = list(zip(*paper_of_chemical))
-    print(column[1][10])
+    #column = list(zip(*paper_of_chemical))
+    #print(column[1][10])
+    print(len(paper_of_chemical))
     
-
     # test case for paper given disease
     
     test_disease = myQuery.findDiseasebyID('MESH:D058489')
     print(test_disease)
     paper_of_disease = myQuery.findPaperGivenDisease(test_disease)
-    print(len(paper_of_disease)) # 456 papers
+    print(len(paper_of_disease)) # 456 papers/ Actually 1 paper
     
-
+    
     # test case for paper given pair
     
     test_disease = myQuery.findDiseasebyID('MESH:D011471')
@@ -217,10 +236,8 @@ if __name__ == "__main__":
     
     # test string match for chemical
     test_chemical_name = 'Isoquino'
-    test_chemical_node_list = myQuery.findChemicalContainName(test_chemical_name)
-    for node in test_chemical_node_list:
-        print(node.get('ChemicalID'))
-
+    print(myQuery.findChemicalContainName(test_chemical_name))
+    
     # test case for disease given chemical
     test_chemical = myQuery.findChemicalbyID('MESH:C534883')
     disease_by_chemical_list = myQuery.findDiseaseGivenChemical(test_chemical)
