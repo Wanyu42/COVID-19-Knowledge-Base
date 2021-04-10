@@ -10,6 +10,25 @@ class GraphQuery:
         self.relmatcher = RelationshipMatcher(self.graph)
         self.size_lim = size_limit
 
+    def findNodebyID(self, ID):
+        """
+        Return the node by ID
+        :param ID: string type
+        :return: Node type
+        """
+        node = self.graph.run("MATCH(n) WHERE n.ChemicalID = \'" +
+                         str(ID) + "\' OR n.DiseaseID = \'" + str(ID) + "\' RETURN n").data()
+        if not node:
+            return None
+        else:
+            return node[0]['n']
+
+    def findNodeContainName(self, Name):
+        nodes = self.graph.run("MATCH (n) WHERE n.ChemicalName CONTAINS \'"+Name
+                       +"\' OR n.DiseaseName Contains \'"+Name+"\' RETURN n").data()
+        return [node['n'] for node in nodes]
+
+
     def findDiseasebyID(self, DiseaseID):
         '''
         find Disease Node by DiseaseID
@@ -113,28 +132,35 @@ class GraphQuery:
         paper_list = list(set(flatten(paper_list)))
         return paper_list
 
-    def findDiseaseContainName(self, DiseaseName):
+    def findDiseaseContainName(self, DiseaseName, return_node=False):
         """
         find the disease Node containing the name string
         :param DiseaseName: string type
         :return: a dictionary {key:DiseaseID, value:DiseaseName}
         """
         node_list = self.nodematcher.match('Disease', DiseaseName=CONTAINS(DiseaseName)).\
-            limit(self.size_lim)
+            limit(self.size_lim).all()
+        if return_node==True:
+            return node_list
+
         node_dict = {}
         for node in node_list:
             node_dict[node.get('DiseaseID')] = node.get('DiseaseName')
         return node_dict
 
 
-    def findChemicalContainName(self, ChemicalName):
+    def findChemicalContainName(self, ChemicalName, return_node=False):
         """
         find the chemical Node containing the name string
         :param ChemicalName: string type
         :return: list of Node type
         """
         node_list = self.nodematcher.match('Chemical', ChemicalName=CONTAINS(ChemicalName)).\
-            limit(self.size_lim)
+            limit(self.size_lim).all()
+
+        if return_node==True:
+            return node_list
+
         node_dict = {}
         for node in node_list:
             node_dict[node.get('ChemicalID')] = node.get('ChemicalName')
@@ -189,9 +215,8 @@ if __name__ == "__main__":
 
     myQuery = GraphQuery()
 
-    '''
     # test cases
-
+    '''
     test_node = myQuery.findDiseasebyID('MESH:D058489')
     child_of_test = myQuery.findDiseaseChild(test_node)
     print(len(child_of_test))
@@ -231,8 +256,8 @@ if __name__ == "__main__":
     print(paper_pair)
     
     # test string match for disease
-    test_disease_name = 'Disorders of Sex Development'
-    print(myQuery.findDiseaseContainName(test_disease_name))
+    test_disease_name = 'hahahah'
+    print(myQuery.findDiseaseContainName(test_disease_name, return_node=True))
     
     # test string match for chemical
     test_chemical_name = 'Isoquino'
@@ -247,6 +272,7 @@ if __name__ == "__main__":
     chemical_by_disease_list = myQuery.findChemicalGivenDisease(myQuery.findDiseasebyID('MESH:D058489'))
     print(len(chemical_by_disease_list))
     '''
-
+    test_name = 'Isoquino'
+    nodes = myQuery.findNodeContainName(test_name)
 
     print("Goodbye GraphQuery")

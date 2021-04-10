@@ -41,22 +41,21 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="mb-4">
+                <form method="post" action="{{url_for('init')}}">
                 <div class="input-select">
                     <select data-trigger="" name="choices-single-defaul" class="select">
                         <option placeholder="">Not Specific</option>
-                        <option>Chemicals</option>
-                        <option>Genes</option>
-                        <option>Diseases</option>
+                        <option value="Chemical">Chemical</option>
+                        <option value="Disease">Disease</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <form method="post" action="{{url_for('init')}}">
-                        <input placeholder="Search for..." type="text" class="form-control" name="chemical" id="chemical">
                         <div class="input-group-append">
+                            <input placeholder="Search for..." type="text" class="form-control" name="chemical" id="chemical">
                             <button type="submit" class="btn btn-secondary" id="searchButton"><i class="fa fa-search"></i></button>
                         </div>
-                    </form>
                 </div>
+                </form>
             </div>
 
             <div class="mb-4">
@@ -116,9 +115,11 @@
                                 </tr>
                             {% endif %}
                             {% if paperlist %}
-                                {% for paper in paperlist %}
+                                {% for key,value in paperlist.items() %}
                                     <tr>
-                                        <td> {{ paper }} </td>
+                                        <td class="align-middle">
+                                            <div><a href={{value["doi"]}}>{{ value["title"] }}</a></div><span>Authors: {{value["authors"]}}<br>{{value["year"]}}</span>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
