@@ -80,7 +80,7 @@
             </div>
 
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                 <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -94,28 +94,32 @@
                     <table class="mb-0 table table-hover">
                         <thead>
                             <tr>
+                                <th class="align-middle bt-0">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if chemical_name %}
+                            <tr>
+                                <td class="align-middle"> {{ chemical_name }} </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    <table class="mb-0 table table-hover">
+                        <thead>
+                            <tr>
                                 <th class="align-middle bt-0">Title</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% if paperlist %}
+                            {% for key,value in paperlist.items() %}
                             <tr>
                                 <td class="align-middle">
-                                    <div><a href="/apps/tasks/list">Ergonomic real-time adapter</a></div><span>Last Edited by: Savanah Durgan <br>Sunday, 12 June, 2018</span>
+                                    <div><a href={{value["doi"]}}>{{ value["title"] }}</a></div><span>Authors: {{value["authors"]}}<br>{{value["year"]}}</span>
                                 </td>
                             </tr>
-                            {% if chemical_name %}
-                                <tr>
-                                    <td class="align-middle"> {{ chemical_name }} </td>
-                                </tr>
-                            {% endif %}
-                            {% if paperlist %}
-                                {% for key,value in paperlist.items() %}
-                                    <tr>
-                                        <td class="align-middle">
-                                            <div><a href={{value["doi"]}}>{{ value["title"] }}</a></div><span>Authors: {{value["authors"]}}<br>{{value["year"]}}</span>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             {% endif %}
                         </tbody>
                     </table>
@@ -133,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div class="mb-4">
                 <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                     <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
@@ -142,9 +146,56 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="avatar-image avatar-image--loaded">
-                    <div class="avatar avatar--md avatar-image__image">
-                        <div class="avatar__content"><center><img src="https://miro.medium.com/max/875/1*Lx6iWlcFiCHVe1r4zAeijQ.png"></center></div>
+                <div class="mb-3 Card_custom-card--border_5wJKy card">
+                    <div class="table-responsive-xl">
+                        <table class="mb-0 table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle bt-0">Parent Node</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if parentlist %}
+                                {% for parentnode in parentlist%}
+                                <tr>
+                                    <td class="align-middle"> {{ parentnode }} </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        <table class="mb-0 table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle bt-0">Child Node</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if childlist %}
+                                {% for childnode in childlist %}
+                                <tr>
+                                    <td class="align-middle"> {{ childnode }} </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                        <table class="mb-0 table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle bt-0">Relation Node</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if relationlist %}
+                                {% for relationnode in relationlist %}
+                                <tr>
+                                    <td class="align-middle"> {{ relationnode }} </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
