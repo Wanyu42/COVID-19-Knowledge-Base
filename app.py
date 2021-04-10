@@ -18,6 +18,10 @@ def hello():
 def init():
     result_name = None
     paperlist = None
+    parentlist = None
+    childlist = None
+    relationlist = None
+    nodetype = None
 
     if request.method == 'POST':
         input = request.form['chemical']
@@ -29,15 +33,26 @@ def init():
                 if not node:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     if node.has_label('Disease'):
+                        nodetype = 'Disease'
                         result_name = node['DiseaseName']
                         pmid_list = myQuery.findPaperGivenDisease(node)
                         paperlist = interface.getPaperInfobyID(pmid_list)
+                        parentlist = myQuery.findDiseaseParent(node)
+                        childlist = myQuery.findDiseaseChild(node)
+                        relationlist = myQuery.findChemicalGivenDisease(node)
                     else:
+                        nodetype = 'Chemical'
                         result_name = node['ChemicalName']
                         pmid_list = myQuery.findPaperGivenChemical(node)
                         paperlist = interface.getPaperInfobyID(pmid_list)
+                        parentlist = myQuery.findChemicalParent(node)
+                        childlist = myQuery.findChemicalChild(node)
+                        relationlist = myQuery.findDiseaseGivenChemical(node)
 
             else:
                 nodes = myQuery.findNodeContainName(input)
@@ -62,6 +77,7 @@ def init():
 
 
         elif type == "Chemical":
+            nodetype = 'Chemical'
             if input.upper().startswith('MESH')==True:
                 query_result = myQuery.findChemicalbyID(input)
 
@@ -69,10 +85,16 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     result_name = query_result['ChemicalName']
                     pmid_list = myQuery.findPaperGivenChemical(query_result)
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    parentlist = myQuery.findChemicalParent(query_result)
+                    childlist = myQuery.findChemicalChild(query_result)
+                    relationlist = myQuery.findDiseaseGivenChemical(query_result)
             else:
                 query_result = myQuery.findChemicalContainName(input, return_node=True)
 
@@ -95,6 +117,7 @@ def init():
 
 
         elif type == "Disease":
+            nodetype = 'Disease'
             if input.upper().startswith('MESH') == True:
                 query_result = myQuery.findDiseasebyID(input)
 
@@ -102,10 +125,18 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     result_name = query_result['DiseaseName']
                     pmid_list = myQuery.findPaperGivenDisease(query_result)
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    parentlist = myQuery.findDiseaseParent(query_result)
+                    childlist = myQuery.findDiseaseChild(query_result)
+                    relationlist = myQuery.findChemicalGivenDisease(query_result)
+
+
 
             else:
                 query_result = myQuery.findDiseaseContainName(input, return_node=True)
@@ -126,8 +157,28 @@ def init():
                     pmid_list = list(set(pmid_list))
                     # get the full paper infos
                     paperlist = interface.getPaperInfobyID(pmid_list)
+        if nodetype == 'Chemical':
+            if parentlist and len(parentlist) > 5:
+                parentlist = parentlist[:5]
+            parentlist = [pnode['ChemicalName'] for pnode in parentlist]
+            if childlist and len(childlist) > 5:
+                childlist = childlist[:5]
+            childlist = [cnode['ChemicalName'] for cnode in childlist]
+            if relationlist and len(relationlist) > 5:
+                relationlist = relationlist[:5]
+            relationlist = [rnode['DiseaseName'] for rnode in relationlist]
+        elif nodetype == 'Disease':
+            if parentlist and len(parentlist) > 5:
+                parentlist = parentlist[:5]
+            parentlist = [pnode['DiseaseName'] for pnode in parentlist]
+            if childlist and len(childlist) > 5:
+                childlist = childlist[:5]
+            childlist = [cnode['DiseaseName'] for cnode in childlist]
+            if relationlist and len(relationlist) > 5:
+                relationlist = relationlist[:5]
+            relationlist = [rnode['ChemicalName'] for rnode in relationlist]
 
-    return render_template('list.html', chemical_name=result_name, paperlist = paperlist)
+    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist)
 
 
 if __name__ == '__main__':
