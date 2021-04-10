@@ -59,29 +59,23 @@
             </div>
 
             <div class="mb-4">
-                <div class="small mb-3">Subjects</div>
-                <ul class="nav flex-column nav-pills">
-                    <li class="nav-item"><a href="#" class="d-flex nav-link" id="linkS1">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s1">12</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s2">4</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="s3">9</span></a></li>
-                </ul>
-            </div>
-
-            <div class="mb-4">
                 <div class="small mb-3">Authors</div>
                 <ul class="nav flex-column nav-pills">
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">12</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a2">4</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a3">9</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Authors<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">...</span></a></li>
+                    {% if paperlist %}
+                        {% for key,value in paperlist.items() %}
+                            <li class="nav-item"><a href="#" class="d-flex nav-link">{{value["authors"]}}<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">1</span></a></li>
+                        {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
 
             <div class="mb-4">
                 <div class="small mb-3">Publication Dates</div>
                 <ul class="nav flex-column nav-pills">
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Analytics Redesign<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p1">12</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">New Website<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p2">4</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Chart for Newsletter<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p3">9</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">2015-2021<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p1">12</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">2005-2014<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p2">4</span></a></li>
+                    <li class="nav-item"><a href="#" class="d-flex nav-link">Before 2005<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p3">9</span></a></li>
                 </ul>
             </div>
 
