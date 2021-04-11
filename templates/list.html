@@ -86,7 +86,7 @@
             </div>
 
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                 <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -100,7 +100,9 @@
                     <table class="mb-0 table table-hover">
                         <thead>
                             <tr>
-                                <th class="align-middle bt-0">Name</th>
+                                {% if nodetype %}
+                                <th class="align-middle bt-0">{{ nodetype }} Name</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -143,7 +145,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="mb-4">
                 <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                     <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
@@ -157,7 +159,9 @@
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Parent Node</th>
+                                    {%  if nodetype %}
+                                    <th class="align-middle bt-0">Parent {{ nodetype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,7 +177,9 @@
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Child Node</th>
+                                    {% if nodetype %}
+                                    <th class="align-middle bt-0">Child {{ nodetype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,7 +195,9 @@
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Relation Node</th>
+                                    {% if relationtype %}
+                                    <th class="align-middle bt-0">Relational {{ relationtype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
