@@ -59,12 +59,23 @@ def init():
                 if not nodes:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     if nodes[0].has_label('Disease'):
+                        nodetype = 'Disease'
                         result_name = nodes[0]['DiseaseName']
+                        parentlist = myQuery.findDiseaseParent(nodes[0])
+                        childlist = myQuery.findDiseaseChild(nodes[0])
+                        relationlist = myQuery.findChemicalGivenDisease(nodes[0])
                     else:
+                        nodetype = 'Chemical'
                         result_name = nodes[0]['ChemicalName']
-                    result_name = nodes[0]
+                        parentlist = myQuery.findChemicalParent(nodes[0])
+                        childlist = myQuery.findChemicalChild(nodes[0])
+                        relationlist = myQuery.findDiseaseGivenChemical(nodes[0])
+                 #   result_name = nodes[0]
                     pmid_list = []
                     # iterate through nodes
                     for node in nodes:
@@ -101,10 +112,16 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     ## There is a list of nodes
                     # chemical names
                     result_name = query_result[0]['ChemicalName']
+                    parentlist = myQuery.findChemicalParent(query_result[0])
+                    childlist = myQuery.findChemicalChild(query_result[0])
+                    relationlist = myQuery.findDiseaseGivenChemical(query_result[0])
                     # get the paper
                     pmid_list = []
                     # iterate through nodes
@@ -144,10 +161,16 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    parentlist = {}
+                    childlist = {}
+                    relationlist = {}
                 else:
                     ## There is a list of nodes
                     # chemical names
                     result_name = query_result[0]['DiseaseName']
+                    parentlist = myQuery.findDiseaseParent(query_result[0])
+                    childlist = myQuery.findDiseaseChild(query_result[0])
+                    relationlist = myQuery.findChemicalGivenDisease(query_result[0])
                     # get the paper
                     pmid_list = []
                     # iterate through nodes
