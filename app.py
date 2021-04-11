@@ -22,6 +22,7 @@ def init():
     childlist = None
     relationlist = None
     nodetype = None
+    relationtype = None
 
     if request.method == 'POST':
         input = request.form['chemical']
@@ -190,6 +191,7 @@ def init():
             if relationlist and len(relationlist) > 5:
                 relationlist = relationlist[:5]
             relationlist = [rnode['DiseaseName'] for rnode in relationlist]
+            relationtype = 'Disease'
         elif nodetype == 'Disease':
             if parentlist and len(parentlist) > 5:
                 parentlist = parentlist[:5]
@@ -200,8 +202,9 @@ def init():
             if relationlist and len(relationlist) > 5:
                 relationlist = relationlist[:5]
             relationlist = [rnode['ChemicalName'] for rnode in relationlist]
+            relationtype = 'Chemical'
 
-    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist)
+    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist, nodetype = nodetype, relationtype = relationtype)
 
 
 if __name__ == '__main__':
