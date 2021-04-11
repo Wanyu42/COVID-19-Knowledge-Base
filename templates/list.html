@@ -114,7 +114,9 @@
                     <table class="mb-0 table table-hover">
                         <thead>
                             <tr>
-                                <th class="align-middle bt-0">Title</th>
+                                {% if nodetype %}
+                                <th class="align-middle bt-0">{{ nodetype }} Related Papers</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
