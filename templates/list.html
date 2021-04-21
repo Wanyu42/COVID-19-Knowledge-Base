@@ -35,24 +35,60 @@
         -->
     </style>
     <script>
-function goPage(pno,psize){
+    function getMyPaperList(filter){
+        var myTable = document.getElementById("paperListTable");
+        var num = myTable.rows.length;
+
+    }
+function goPage(pno,psize,filter){
   var itable = document.getElementById("paperListTable");
-  var num = itable.rows.length;//表格所有行数(所有记录数)
+  var num = itable.rows.length;
+  var currentRow = 0;
+  var p1 = p2 = p3 = 0;
+  for (var i = 0; i < num; i++) {
+    // GET THE CELLS COLLECTION OF THE CURRENT ROW.
+            var objCells = itable.rows.item(currentRow).cells;
+			var year = parseInt(objCells.item(1).innerHTML);
+			if(year >= 2015)p1++;
+			else if(year < 2015 && year >=2005)p2++;
+			else if(year < 2005)p3++;
+			
+			if(filter == 0){}
+			else if(filter == 1){
+				if(year >= 2015)currentRow++;
+				else{
+					itable.deleteRow(currentRow);
+				}
+			}
+			else if(filter == 2){
+				if(year < 2015 && year >=2005)currentRow++;
+				else{
+					itable.deleteRow(currentRow);
+				}
+			}
+			else if(filter == 3){
+				if(year < 2005)currentRow++;
+				else{
+					itable.deleteRow(currentRow);
+				}
+			}
+            //info.innerHTML = info.innerHTML + '<br />';     // ADD A BREAK (TAG).
+        }
+	var num = itable.rows.length;
+  
   console.log(num);
-  var totalPage = 0;//总页数
-  var pageSize = psize;//每页显示行数
-  //总共分几页
+  var totalPage = 0;
+  var pageSize = psize;
   if(num/pageSize > parseInt(num/pageSize)){
       totalPage=parseInt(num/pageSize)+1;
     }else{
       totalPage=parseInt(num/pageSize);
     }
-  var currentPage = pno;//当前页数
-  var startRow = (currentPage - 1) * pageSize+1;//开始显示的行 31
-    var endRow = currentPage * pageSize;//结束显示的行  40
-    endRow = (endRow > num)? num : endRow;  //40
+  var currentPage = pno;
+  var startRow = (currentPage - 1) * pageSize+1;
+    var endRow = currentPage * pageSize;
+    endRow = (endRow > num)? num : endRow;
     console.log(endRow);
-    //遍历显示数据实现分页
   for(var i=1;i<(num+1);i++){
     var irow = itable.rows[i-1];
     if(i>=startRow && i<=endRow){
@@ -61,29 +97,77 @@ function goPage(pno,psize){
       irow.style.display = "none";
     }
   }
-  var tempStr = num+" results, "+totalPage+" pages, current page: "+currentPage;
+  var tempStr = num+" results, "+totalPage+" pages, currently on page "+currentPage;
   var turnPage = "";
   if(currentPage>1){
-    turnPage += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">First</a>";
-    turnPage += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\">Prev</a>"
+    turnPage += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+","+filter+")\">First &nbsp</a>";
+    turnPage += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+","+filter+")\">Prev &nbsp</a>"
   }
   else{
-    turnPage += "First";
-    turnPage += "Prev";
+    turnPage += "First ";
+    turnPage += "Prev ";
   }
   if(currentPage<totalPage){
-    turnPage += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">Next</a>";
-    turnPage += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">Last</a>";
+    turnPage += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+","+filter+")\"> &nbsp Next &nbsp</a>";
+    turnPage += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+","+filter+")\">Last &nbsp</a>";
   }else{
-    turnPage += "Next";
-    turnPage += "Last";
+    turnPage += "Next ";
+    turnPage += "Last ";
   }
   document.getElementById("page1").innerHTML = tempStr;
   document.getElementById("page2").innerHTML = turnPage;
+  //document.getElementById("p1").innerHTML = p1;
+  //document.getElementById("p2").innerHTML = p2;
+  //document.getElementById("p3").innerHTML = p3;
+}
+
+function goAuthorPage(pno,psize){
+  var itable = document.getElementById("authorTable");
+  var num = itable.rows.length;
+  console.log(num);
+  var totalPage = 0;
+  var pageSize = psize;
+  if(num/pageSize > parseInt(num/pageSize)){
+      totalPage=parseInt(num/pageSize)+1;
+    }else{
+      totalPage=parseInt(num/pageSize);
+    }
+  var currentPage = pno;
+  var startRow = (currentPage - 1) * pageSize+1;
+    var endRow = currentPage * pageSize;
+    endRow = (endRow > num)? num : endRow;
+    console.log(endRow);
+  for(var i=1;i<(num+1);i++){
+    var irow = itable.rows[i-1];
+    if(i>=startRow && i<=endRow){
+      irow.style.display = "block";
+    }else{
+      irow.style.display = "none";
+    }
+  }
+  var tempStr = num+" results, "+totalPage+" pages, currently on page "+currentPage;
+  var turnPage = "";
+  if(currentPage>1){
+    turnPage += "<a href=\"#\" onClick=\"goAuthorPage("+(1)+","+psize+")\">First &nbsp</a>";
+    turnPage += "<a href=\"#\" onClick=\"goAuthorPage("+(currentPage-1)+","+psize+")\">Prev &nbsp</a>"
+  }
+  else{
+    turnPage += "First ";
+    turnPage += "Prev ";
+  }
+  if(currentPage<totalPage){
+    turnPage += "<a href=\"#\" onClick=\"goAuthorPage("+(currentPage+1)+","+psize+")\"> &nbsp Next &nbsp</a>";
+    turnPage += "<a href=\"#\" onClick=\"goAuthorPage("+(totalPage)+","+psize+")\">Last &nbsp</a>";
+  }else{
+    turnPage += "Next ";
+    turnPage += "Last ";
+  }
+  document.getElementById("authorPage1").innerHTML = tempStr;
+  document.getElementById("authorPage2").innerHTML = turnPage;
 }
 </script>
 </head>
-<body onload="goPage(1,4);">
+<body onload=" goPage(1,5,0);goAuthorPage(1,7)">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
     <div class="row">
@@ -110,20 +194,33 @@ function goPage(pno,psize){
                 <div class="small mb-3">Authors</div>
                 <ul class="nav flex-column nav-pills">
                     <li class="nav-item"><a href="#" class="d-flex nav-link">Authors<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">...</span></a></li>
+					<table>
+                    <tbody id="authorTable">
                     {% if paperlist %}
                         {% for key,value in paperlist.items() %}
-                            <li class="nav-item"><a href="#" class="d-flex nav-link">{{value["authors"]}}<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">1</span></a></li>
+						<tr>
+						<td>
+                            <li class="nav-item"><a href="{{value["doi"]}}" class="d-flex nav-link">{{value["authors"]}}<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="a1">1</span></a></li>
+							</td>
+						</tr>
                         {% endfor %}
                     {% endif %}
+					 </tbody>
+                    </table>
                 </ul>
+				                <div  id="authorPage1">
+                </div>
+                <div  id="authorPage2">
+                </div>
+				          
             </div>
 
             <div class="mb-4">
                 <div class="small mb-3">Publication Dates</div>
                 <ul class="nav flex-column nav-pills">
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">2015-2021<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p1">12</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">2005-2014<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p2">4</span></a></li>
-                    <li class="nav-item"><a href="#" class="d-flex nav-link">Before 2005<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p3">9</span></a></li>
+                    <li class="nav-item"><a href="javascript:;" onclick = "goPage(1,5,0)" class="d-flex nav-link">2015-2021<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p1">70</span></a></li>
+                    <li class="nav-item"><a href="javascript:;" onclick = "goPage(1,5,0)" class="d-flex nav-link">2005-2014<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p2">367</span></a></li>
+                    <li class="nav-item"><a href="javascript:;" onclick = "goPage(1,5,3)" class="d-flex nav-link">Before 2005<span class="ml-auto align-self-center badge badge-secondary badge-pill" id="p3">193</span></a></li>
                 </ul>
             </div>
 
@@ -164,8 +261,11 @@ function goPage(pno,psize){
                             {% for key,value in paperlist.items() %}
                             <tr>
                                 <td class="align-middle">
-                                    <div><a href={{value["doi"]}}>{{ value["title"] }}</a></div><span>Authors: {{value["authors"]}}<br>{{value["year"]}}</span>
+                                    <div><a href={{value["doi"]}}>{{ value["title"] }}</a></div><span value={{value["year"]}}>Authors: {{value["authors"]}}</span>
                                 </td>
+								<td>
+								{{value["year"]}}
+								</td>
                             </tr>
                             {% endfor %}
                             {% endif %}
