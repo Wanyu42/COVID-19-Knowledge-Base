@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
-    <!--  All snippets are MIT license http://bootdey.com/license -->
     <title>Search Engine</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -225,7 +223,7 @@ function goAuthorPage(pno,psize){
             </div>
 
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                 <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -239,7 +237,9 @@ function goAuthorPage(pno,psize){
                     <table class="mb-0 table table-hover">
                         <thead>
                             <tr>
-                                <th class="align-middle bt-0">Name</th>
+                                {% if nodetype %}
+                                <th class="align-middle bt-0">{{ nodetype }} Name</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -253,7 +253,9 @@ function goAuthorPage(pno,psize){
                     <table class="mb-0 table table-hover">
                         <thead>
                             <tr>
-                                <th class="align-middle bt-0">Title</th>
+                                {% if nodetype %}
+                                <th class="align-middle bt-0">{{ nodetype }} Related Papers</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody id="paperListTable">\
@@ -278,7 +280,7 @@ function goAuthorPage(pno,psize){
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="mb-4">
                 <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
                     <nav class="mr-auto d-flex align-items-center" aria-label="breadcrumb">
@@ -292,7 +294,9 @@ function goAuthorPage(pno,psize){
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Parent Node</th>
+                                    {%  if nodetype %}
+                                    <th class="align-middle bt-0">Parent {{ nodetype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -308,7 +312,9 @@ function goAuthorPage(pno,psize){
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Child Node</th>
+                                    {% if nodetype %}
+                                    <th class="align-middle bt-0">Child {{ nodetype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -324,7 +330,9 @@ function goAuthorPage(pno,psize){
                         <table class="mb-0 table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle bt-0">Relation Node</th>
+                                    {% if relationtype %}
+                                    <th class="align-middle bt-0">Relational {{ relationtype }}</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
