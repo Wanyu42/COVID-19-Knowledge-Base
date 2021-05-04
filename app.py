@@ -18,6 +18,7 @@ def hello():
 def init():
     result_name = None
     paperlist = None
+    similarlist = None
     parentlist = None
     childlist = None
     relationlist = None
@@ -34,6 +35,7 @@ def init():
                 if not node:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -43,6 +45,8 @@ def init():
                         result_name = node['DiseaseName']
                         pmid_list = myQuery.findPaperGivenDisease(node)
                         paperlist = interface.getPaperInfobyID(pmid_list)
+                        similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                        similarlist = interface.getPaperInfobyID(similar_pmid_list)
                         parentlist = myQuery.findDiseaseParent(node)
                         childlist = myQuery.findDiseaseChild(node)
                         relationlist = myQuery.findChemicalGivenDisease(node)
@@ -51,6 +55,8 @@ def init():
                         result_name = node['ChemicalName']
                         pmid_list = myQuery.findPaperGivenChemical(node)
                         paperlist = interface.getPaperInfobyID(pmid_list)
+                        similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                        similarlist = interface.getPaperInfobyID(similar_pmid_list)
                         parentlist = myQuery.findChemicalParent(node)
                         childlist = myQuery.findChemicalChild(node)
                         relationlist = myQuery.findDiseaseGivenChemical(node)
@@ -60,6 +66,7 @@ def init():
                 if not nodes:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -86,6 +93,8 @@ def init():
                     pmid_list = list(set(pmid_list))
                     # get the full paper infos
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                    similarlist = interface.getPaperInfobyID(similar_pmid_list)
 
 
         elif type == "Chemical":
@@ -97,6 +106,7 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -104,6 +114,8 @@ def init():
                     result_name = query_result['ChemicalName']
                     pmid_list = myQuery.findPaperGivenChemical(query_result)
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                    similarlist = interface.getPaperInfobyID(similar_pmid_list)
                     parentlist = myQuery.findChemicalParent(query_result)
                     childlist = myQuery.findChemicalChild(query_result)
                     relationlist = myQuery.findDiseaseGivenChemical(query_result)
@@ -113,6 +125,7 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -132,6 +145,8 @@ def init():
                     pmid_list = list(set(pmid_list))
                     # get the full paper infos
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                    similarlist = interface.getPaperInfobyID(similar_pmid_list)
 
 
         elif type == "Disease":
@@ -143,6 +158,7 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -150,6 +166,8 @@ def init():
                     result_name = query_result['DiseaseName']
                     pmid_list = myQuery.findPaperGivenDisease(query_result)
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                    similarlist = interface.getPaperInfobyID(similar_pmid_list)
                     parentlist = myQuery.findDiseaseParent(query_result)
                     childlist = myQuery.findDiseaseChild(query_result)
                     relationlist = myQuery.findChemicalGivenDisease(query_result)
@@ -162,6 +180,7 @@ def init():
                 if not query_result:
                     result_name = 'Not Found!'
                     paperlist = {}
+                    similarlist = {}
                     parentlist = {}
                     childlist = {}
                     relationlist = {}
@@ -181,6 +200,8 @@ def init():
                     pmid_list = list(set(pmid_list))
                     # get the full paper infos
                     paperlist = interface.getPaperInfobyID(pmid_list)
+                    similar_pmid_list = interface.similar_paper(pmid_list, interface.represent_dict)
+                    similarlist = interface.getPaperInfobyID(similar_pmid_list)
         if nodetype == 'Chemical':
             if parentlist and len(parentlist) > 5:
                 parentlist = parentlist[:5]
@@ -204,7 +225,7 @@ def init():
             relationlist = [rnode['ChemicalName'] for rnode in relationlist]
             relationtype = 'Chemical'
 
-    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist, nodetype = nodetype, relationtype = relationtype)
+    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, similarlist = similarlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist, nodetype = nodetype, relationtype = relationtype)
 
 
 if __name__ == '__main__':

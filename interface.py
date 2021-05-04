@@ -89,7 +89,7 @@ def getPaperInfobyID(pmid_list):
     return papers
 
 
-def similar_paper(seed_list, represent_dict, seed_lim = 10, return_lim = 10):
+def similar_paper(seed_list, represent_dict, seed_lim = 10, return_lim = 5):
     """
     Recommend similar paper based on the seed_list papers
     :param seed_list: a list of papers id in string
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     test_chemical = myQuery.findChemicalbyID('MESH:D019307')
     paper_list = myQuery.findPaperGivenChemical(test_chemical)
 
-    #papers = getPaperInfobyID(paper_list)
+    papers = getPaperInfobyID(paper_list)
 
     r_dict = read_abstract_title('./Learning/repre_dict')
     r_dict = r_dict[0]
