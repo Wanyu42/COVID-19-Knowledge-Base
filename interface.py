@@ -24,7 +24,7 @@ def read_abstract_title(filename):
     return objects
 
 
-represent_dict = read_abstract_title('./Learning/repre_dict')
+represent_dict = read_abstract_title('./learning/repre_dict')
 represent_dict = represent_dict[0]
 
 
