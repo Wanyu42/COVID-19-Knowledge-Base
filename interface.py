@@ -1,8 +1,32 @@
 from GraphQueryClass import GraphQuery
-import networkx as nx
-import matplotlib.pyplot as plt
 import sqlite3
 import re
+import pickle
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+
+def read_abstract_title(filename):
+    """
+    Read pickle file
+    :param filename: String, path of the file
+    :return: a list contains the object
+    """
+    pickle_file = open(filename, "rb")
+    objects = []
+    while True:
+        try:
+            objects.append(pickle.load(pickle_file))
+        except EOFError:
+            break
+    pickle_file.close()
+
+    return objects
+
+
+represent_dict = read_abstract_title('./Learning/repre_dict')
+represent_dict = represent_dict[0]
+
 
 def findParentSubgraph(Node):
     if Node.has_label('Chemical'):
@@ -65,6 +89,26 @@ def getPaperInfobyID(pmid_list):
     return papers
 
 
+def similar_paper(seed_list, represent_dict, seed_lim = 10, return_lim = 10):
+    """
+    Recommend similar paper based on the seed_list papers
+    :param seed_list: a list of papers id in string
+    :return:
+    """
+    seed_list = list(map(int, seed_list))[:seed_lim]
+    seed_list = [seed for seed in seed_list if seed in represent_dict.keys()]
+
+    seed_vector = np.vstack([represent_dict[paper] for paper in seed_list])
+    whole_vector = np.array(list(represent_dict.values()))
+    pmid_whole = np.array(list(represent_dict.keys()))
+
+    scores = cosine_similarity(seed_vector, whole_vector).sum(axis=0)
+    ind = np.argpartition(-scores, kth=return_lim)[:return_lim]
+    result_list = [str(id) for id in pmid_whole[ind] if id not in seed_list]
+
+    return result_list
+
+
 if __name__ == "__main__":
     myQuery = GraphQuery(30)
 
@@ -81,5 +125,9 @@ if __name__ == "__main__":
     test_chemical = myQuery.findChemicalbyID('MESH:D019307')
     paper_list = myQuery.findPaperGivenChemical(test_chemical)
 
-    papers = getPaperInfobyID(paper_list)
+    #papers = getPaperInfobyID(paper_list)
+
+    r_dict = read_abstract_title('./Learning/repre_dict')
+    r_dict = r_dict[0]
+    recommended = similar_paper(paper_list, r_dict)
 
