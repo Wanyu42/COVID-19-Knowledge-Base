@@ -7,15 +7,12 @@ import interface
 app = Flask(__name__)
 myQuery = GraphQuery()
 
-'''
-@app.route('/')
-def hello():
-    query_result = myQuery.findChemicalbyID('MESH:D019307')
-    return query_result['ChemicalName']
-'''
 
 @app.route('/', methods=['POST','GET'])
 def init():
+    if request.method == 'GET':
+        return render_template('start.html')
+
     result_name = None
     paperlist = None
     similarlist = None
@@ -225,7 +222,7 @@ def init():
             relationlist = [rnode['ChemicalName'] for rnode in relationlist]
             relationtype = 'Chemical'
 
-    return render_template('list.html', chemical_name=result_name, paperlist = paperlist, similarlist = similarlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist, nodetype = nodetype, relationtype = relationtype)
+        return render_template('list.html', chemical_name=result_name, paperlist = paperlist, similarlist = similarlist, parentlist = parentlist, childlist = childlist, relationlist = relationlist, nodetype = nodetype, relationtype = relationtype)
 
 
 if __name__ == '__main__':
