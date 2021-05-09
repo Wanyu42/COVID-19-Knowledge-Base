@@ -25,6 +25,6 @@ The learning part is stored in "learning" folder. In essense, we used quickthoug
 The website is built based on Flask framework. The web service is launched through app.py. The following code is run in Windows:
 
 
-  >set FLASK_APP=app.py\n
+  >set FLASK_APP=app.py
   
   >flask run
